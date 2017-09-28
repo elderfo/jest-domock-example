@@ -29,9 +29,9 @@ describe('getCategories', () => {
       ],
     };
 
-    fetch.mockImplementation(() =>
-      Promise.resolve({ json: () => Promise.resolve(mockResponse) })
-    );
+    fetch.mockImplementation(async () => {
+      return { json: async () => mockResponse };
+    });
 
     const categories = await getCategories();
     expect(categories).toEqual([
