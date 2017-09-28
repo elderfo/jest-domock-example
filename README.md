@@ -1,0 +1,1 @@
+# jest-domock-example
