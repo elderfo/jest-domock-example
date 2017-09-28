@@ -2,10 +2,9 @@ import fetch from 'node-fetch';
 
 import { getCategories } from './data';
 
-jest.mock('node-fetch');
-
 beforeEach(() => {
   jest.resetAllMocks();
+  jest.resetModules();
 });
 
 describe('getCategories', () => {
@@ -29,11 +28,14 @@ describe('getCategories', () => {
       ],
     };
 
-    fetch.mockImplementation(() =>
-      Promise.resolve({ json: () => Promise.resolve(mockResponse) })
-    );
+    jest.doMock('node-fetch', () => {
+      return jest.fn(async () => ({
+        json: async () => mockResponse,
+      }));
+    });
+    const data = require('./data');
 
-    const categories = await getCategories();
+    const categories = await data.getCategories();
     expect(categories).toEqual([
       { id: 1, name: 'Category 1' },
       { id: 2, name: 'Category 2' },
